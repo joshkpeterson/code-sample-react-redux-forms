@@ -24,7 +24,7 @@ export default function UserForm() {
 
     return (
         <div>
-            {/* {fields['page_title']} */}
+            {fields && fields.sections[0].title}
         </div>
     )
 }
