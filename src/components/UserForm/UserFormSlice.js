@@ -13,10 +13,9 @@ export const fetchFormFieldsById = createAsyncThunk(
 // Then, handle actions in your reducers:
 const userFormSlice = createSlice({
     name: 'userForm',
-    initialState: { entities: [], loading: 'idle' },
+    initialState: {},
     reducers: {
         fieldsLoading(state, action) {
-            // Use a "state machine" approach for loading state instead of booleans
             if (state.loading === 'idle') {
                 state.loading = 'pending';
             }
@@ -24,15 +23,17 @@ const userFormSlice = createSlice({
         fieldsReceived(state, action) {
             if (state.loading === 'pending') {
                 state.loading = 'idle';
-                state.fields = action.payload;
+                state.value = action.payload;
             }
         }
     },
     extraReducers: {
         [fetchFormFieldsById.fulfilled]: (state, action) => {
-            state.entities.push(action.payload);
+            state.value = action.payload;
         }
     }
 })
+
+export const selectFields = state => state.fields.value;
 
 export default userFormSlice.reducer;

@@ -3,6 +3,7 @@ import { React, useMemo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     fetchFormFieldsById,
+    selectFields
 } from './UserFormSlice';
 
 
@@ -10,23 +11,20 @@ const USER_FORM_ID = 1;
 
 export default function UserForm() {
     const dispatch = useDispatch();
-    // const fields = useSelector((state) => state.fields.value)
+    const fields = useSelector(selectFields);
 
     useEffect(() => {
-        async function fetchData () {
-            dispatch(fetchFormFieldsById(USER_FORM_ID));
-           
-            // setData(result.data.series);
-            // console.log(result.data);
-        }
-
-        fetchData();
-
+        dispatch(fetchFormFieldsById(USER_FORM_ID));
       }, []);
+
+    useEffect(() => {
+        console.log('hey')
+        console.log(fields)
+    }, [fields])
 
     return (
         <div>
-            yoyo
+            {/* {fields['page_title']} */}
         </div>
     )
 }
