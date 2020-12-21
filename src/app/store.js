@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import userFormReducer from 'components/UserForm/UserFormSlice';
+
 
 export default configureStore({
   reducer: {
-    counter: counterReducer,
+    fields: userFormReducer,
   },
 });

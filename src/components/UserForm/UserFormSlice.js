@@ -1,30 +1,38 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { userAPI } from './userAPI'
+import axios from 'app/axios';
 
 // First, create the thunk
-const fetchUserById = createAsyncThunk(
-  'users/fetchByIdStatus',
-  async (userId, thunkAPI) => {
-    const response = await userAPI.fetchById(userId)
-    return response.data
-  }
-)
-
-// Then, handle actions in your reducers:
-const usersSlice = createSlice({
-  name: 'users',
-  initialState: { entities: [], loading: 'idle' },
-  reducers: {
-    // standard reducer logic, with auto-generated action types per reducer
-  },
-  extraReducers: {
-    // Add reducers for additional action types here, and handle loading state as needed
-    [fetchUserById.fulfilled]: (state, action) => {
-      // Add user to the state array
-      state.entities.push(action.payload)
+export const fetchFormFieldsById = createAsyncThunk(
+    'userForm/requestFieldsById',
+    async (id, thunkAPI) => {
+        const response = await axios(`form-fields/${id}`)
+        return response.data;
     }
-  }
+)
+    
+// Then, handle actions in your reducers:
+const userFormSlice = createSlice({
+    name: 'userForm',
+    initialState: { entities: [], loading: 'idle' },
+    reducers: {
+        fieldsLoading(state, action) {
+            // Use a "state machine" approach for loading state instead of booleans
+            if (state.loading === 'idle') {
+                state.loading = 'pending';
+            }
+        },
+        fieldsReceived(state, action) {
+            if (state.loading === 'pending') {
+                state.loading = 'idle';
+                state.fields = action.payload;
+            }
+        }
+    },
+    extraReducers: {
+        [fetchFormFieldsById.fulfilled]: (state, action) => {
+            state.entities.push(action.payload);
+        }
+    }
 })
 
-// Later, dispatch the thunk as needed in the app
-dispatch(fetchUserById(123))
+export default userFormSlice.reducer;
